@@ -108,9 +108,23 @@
   margin-left: 0.5rem;
 }
 
+#setting {
+  background-color: #8af300;
+}
+#score {
+  justify-content: center;
+  background-color: #f300df;
+}
+#timer {
+  justify-content: right;
+  background-color: #f3db00;
+}
+
 @media (max-width: 600px) {
+  #score {
+    justify-content: left;
+  }
   .grid {
-    width: 100%;
     flex-direction: column;
   }
 }
@@ -126,13 +140,4 @@
   .logo img {
     filter: invert(1);
   }
-}
-
-#text_source {
-  display: flex;
-  flex-flow: column;
-}
-
-#generate_button {
-  width: fit-content;
 }

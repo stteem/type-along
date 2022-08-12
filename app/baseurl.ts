@@ -1,0 +1,1 @@
+export const baseUrl = 'https://random-data-api.com/api/lorem_ipsum/random_lorem_ipsum';

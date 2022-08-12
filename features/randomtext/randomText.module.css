@@ -1,0 +1,34 @@
+.text_source {
+    display: flex;
+    flex-flow: column;
+  }
+  
+  .generate_button {
+    width: fit-content;
+  }
+  
+  #reset_button {
+    width: fit-content;
+  }
+  
+  #score {
+    width: 100%;
+    background-color: #0070f3;
+  }
+
+
+  .grid {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 800px;
+    margin-top: 50px;
+  }
+
+  @media (max-width: 600px) {
+    .grid {
+      width: 100%;
+      flex-direction: column;
+    }
+  }
