@@ -100,7 +100,7 @@ export default function RandomText() {
                     >  
                     </Textarea>
                     <Spacer y={1}></Spacer>
-                    <Button id={styles.reset_button} onClick={handleResetClick}>Reset text</Button>
+                    <Button id={styles.reset_button} onClick={handleResetClick}>Reset challenge</Button>
                     </div>
 
                 </div>
