@@ -1,49 +1,82 @@
-import React, { useReducer, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { addRandomTextAsync, selectText, selectStatus, resetTextArea } from './randomTextSlice';
 import { selectRadio } from '../setup/setupSlice';
-
+import { populateHashtable, storeTypedText, textLen, computeScore, resetScore } from '../score/scoreSlice';
+import OneWay from '../modal/oneway';
 import styles from './randomText.module.css';
 
-import { Textarea, Loading, Button, Grid, Spacer } from "@nextui-org/react";
-
-
+import { Textarea, Loading, Button, Grid, Spacer, Modal, Image, Text, Link  } from "@nextui-org/react";
 
 
 export default function RandomText() {
 
     const random_text_from_store = useAppSelector(selectText);
-    const status = useAppSelector(selectStatus);
+    const generated_text_status = useAppSelector(selectStatus);
     const get_radio = useAppSelector(selectRadio);
-
-    const [copy_paste, setCopyPasteText] = useState('')
-    const [text, setText] = useState('')
 
     const dispatch = useAppDispatch();
 
-    const handleChange = (e:any) => setText(e.target.value);
+    const [copy_paste_text, setCopyPasteText] = useState('')
+    const [typed_text, setTypedText] = useState('')
+
+
+    const handleTypedTextChange = (e:any) => setTypedText(e.target.value);
     const handleCopyPasteChange = (e:any) => setCopyPasteText(e.target.value);
 
 
-    const handleClick = async (e:any) => {
+    const handleGenerateTextClick = async (e:any) => {
         // Create and dispatch the thunk function itself
         await dispatch(addRandomTextAsync())
     }
 
+
     const handleResetClick = async (e:any) => {
-        // Create and dispatch the thunk function itself
+        // dispatch the thunk function itself
         setCopyPasteText('')
-        setText('')
+        setTypedText('')
         dispatch(resetTextArea())
+        dispatch(resetScore())
     }
+
+    const [visible, setVisible] = React.useState(false);
+    const handler = () => setVisible(true);
+    const closeHandler = () => {
+        setVisible(false);
+    };
+
+    const handleKeyDown = async (e:any) => {
+        if(e.keyCode === 8 || e.keyCode === 46){
+            e.preventDefault();
+            handler()
+        }
+    }
+
+    useEffect(() => {
+        if(random_text_from_store.length > 0)
+        console.log('hashing')
+        dispatch(populateHashtable())
+    },[random_text_from_store])
+
+    useEffect(() => {
+        dispatch(storeTypedText(typed_text))
+        dispatch(computeScore())
+    },[typed_text])
+
+    const text = random_text_from_store.trim();
+    const trimmedText = text.length;
+
+    useEffect(() => {
+        dispatch(textLen(trimmedText))
+    }, [trimmedText])
 
 
 
     return (      
         <Grid.Container justify="center" >
                 <div className={styles.grid}>
-                
+                    
                     {
                         get_radio === '1' ?
                             <div className={styles.text_source}>
@@ -58,9 +91,9 @@ export default function RandomText() {
                                 >
                                 </Textarea>
                                 <Spacer y={1}></Spacer>
-                                <Button className={styles.generate_button} onClick={handleClick}>
+                                <Button className={styles.generate_button} onClick={handleGenerateTextClick}>
                                     {
-                                    status == 'loading' ?
+                                    generated_text_status == 'loading' ?
                                     <Loading color="currentColor" type="points" size="sm" />
                                     : "Generate text"
                                     }
@@ -76,7 +109,7 @@ export default function RandomText() {
                                 rows={6} cols={50} 
                                 maxLength={200}
                                 placeholder={'Copy and paste a text to start your typing challenge'}
-                                value={copy_paste}
+                                value={copy_paste_text}
                                 onChange={handleCopyPasteChange}
                             >
                             </Textarea>
@@ -95,14 +128,50 @@ export default function RandomText() {
                         minRows={10} cols={50} 
                         maxLength={200}
                         labelPlaceholder={'Type here to begin your challenge'}
-                        value={text}
-                        onChange={handleChange}
+                        value={typed_text}
+                        onChange={handleTypedTextChange}
+                        onKeyDown={handleKeyDown}
                     >  
                     </Textarea>
                     <Spacer y={1}></Spacer>
                     <Button id={styles.reset_button} onClick={handleResetClick}>Reset challenge</Button>
                     </div>
 
+                </div>
+                <div>
+                    <Modal noPadding open={visible} onClose={closeHandler}>
+                        <Modal.Header
+                        css={{ position: "absolute", zIndex: "$1", top: 5, right: 8 }}
+                        >
+                        <Text color="#363449">
+                            Photo by{" "}
+                            <Link
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            href="https://unsplash.com/@kadams77?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+                
+                            >
+                            K Adams
+                            </Link>{" "}
+                            on{" "}
+                            <Link
+                            rel="noopener noreferrer"
+                            target="_blank"
+                            href="https://unsplash.com/s/photos/one-way-sign?utm_source=unsplash&utm_medium=referral&utm_content=creditCopyText"
+                            >
+                            Unsplash
+                            </Link>
+                        </Text>
+                        </Modal.Header>
+                        <Modal.Body>
+                        <Image
+                            showSkeleton
+                            src="https://res.cloudinary.com/dk02ty1w8/image/upload/v1660386475/mark-duffel-U5y077qrMdI-unsplash_1_ds3cgw.jpg"
+                            width={774}
+                            height={350}
+                        />
+                        </Modal.Body>
+                    </Modal>
                 </div>
         </Grid.Container>
     );

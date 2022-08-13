@@ -1,32 +1,25 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
-import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { checkRadio, selectRadio } from './setupSlice';
+import { useAppDispatch } from '../../app/hooks';
+import { checkRadio } from './setupSlice';
 import { Radio, Text } from '@nextui-org/react';
-import styles from './setup.module.css';
 
 
 
 export default function Settings() {
-
-    const get_radio = useAppSelector(selectRadio);
-
    
     const [checked, setChecked] = React.useState('1');
 
     const dispatch = useAppDispatch();
 
-
-    
     useEffect(() => {
         dispatch(checkRadio(checked))
     },[checked])
 
-
-
     return (      
         <Radio.Group 
             label="" 
+            aria-label={'Options'}
             defaultValue="1" 
             orientation="horizontal"
             value={checked}

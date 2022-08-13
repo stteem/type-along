@@ -32,3 +32,9 @@
       flex-direction: column;
     }
   }
+
+  @media (min-width: 800px) {
+    .text_source {
+      margin-bottom: 60px;
+    }
+  }
