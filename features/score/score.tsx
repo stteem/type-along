@@ -2,6 +2,7 @@ import { useAppSelector } from '../../app/hooks';
 import { selectTotalScore, selectChallengeScore } from '../score/scoreSlice';
 
 import { Text } from "@nextui-org/react";
+import styles from './score.module.css';
 
 
 
@@ -13,7 +14,7 @@ export default function Score() {
     return (      
         <>
             <Text h6 size={15} color="black" css={{ m: 0 }}>
-                Score: {get_score} / {get_total}
+                Score: <span>{get_score} / {get_total}</span>
             </Text>
         </>
     );
