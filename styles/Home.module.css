@@ -14,6 +14,8 @@
 
 .footer {
   display: flex;
+  flex-flow: row;
+  flex-wrap: wrap;
   flex: 1;
   padding: 2rem 0;
   border-top: 1px solid #eaeaea;
@@ -122,6 +124,10 @@
 #timer {
   justify-content: right;
   background-color: #f3db00;
+}
+
+.score_board {
+  margin-bottom: 20px;
 }
 
 @media (max-width: 600px) {

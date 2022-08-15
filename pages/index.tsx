@@ -37,7 +37,8 @@ const Home: NextPage = () => {
         </Card.Body>
       </Card>
 
-      <Grid.Container gap={2} justify="center">
+        
+      <Grid.Container className={styles.score_board} gap={2} justify="center">
 
         <Grid id={styles.setting} xs={12} sm={4}>
           <Settings/>
@@ -49,6 +50,8 @@ const Home: NextPage = () => {
           <Timer/>
         </Grid>
       </Grid.Container>
+          
+      
         
         
         <Card >
@@ -69,7 +72,7 @@ const Home: NextPage = () => {
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
-        Copyright &copy; 2022
+        {' '}Copyright &copy; 2022
         <a 
         href="https://www.linkedin.com/in/uwem-uke-9a6b06125/" 
         target="_blank"

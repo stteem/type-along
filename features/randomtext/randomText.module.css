@@ -27,6 +27,9 @@
   }
 
   @media (max-width: 600px) {
+    .text_source {
+      margin-bottom: 60px;
+    }
     .grid {
       width: 100%;
       flex-direction: column;

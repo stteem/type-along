@@ -6,7 +6,6 @@ import { selectRadio } from '../setup/setupSlice';
 import { selectTimer, isTimeup, stopTime } from '../timer/timerSlice';
 
 import { storeTypedText, textLen, computeScore, resetScore } from '../score/scoreSlice';
-import OneWay from '../modal/oneway';
 import styles from './randomText.module.css';
 
 import { Textarea, Loading, Button, Grid, Spacer, Modal, Image, Text, Link  } from "@nextui-org/react";
