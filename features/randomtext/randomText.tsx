@@ -90,7 +90,7 @@ export default function RandomText() {
             if (typed_text.length === source_text_from_store.length) {
                 dispatch(stopTime("0"))
                 setDisableTyping(true)
-                alert(`Congratulations! You have reached the limit, now check your score! You cannot type any longer until you reset the challenge.`)
+                alert(`Congratulations! You have reached the limit, now check your score and time! You cannot type any longer until you reset the challenge.`)
             }
         }
     },[typed_text])
