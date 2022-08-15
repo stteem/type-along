@@ -1,15 +1,17 @@
 import { configureStore, ThunkAction, Action } from '@reduxjs/toolkit'
 
-import randomTextReducer from '../features/randomtext/randomTextSlice'
+import sourceTextReducer from '../features/randomtext/randomTextSlice'
 import radioReducer from '../features/setup/setupSlice'
 import scoreReducer from '../features/score/scoreSlice'
+import timerReducer from '../features/timer/timerSlice'
 
 export function makeStore() {
   return configureStore({
     reducer: { 
-        random_text: randomTextReducer,
-        generate_text: radioReducer,
-        caluculate_score: scoreReducer
+        source_text: sourceTextReducer,
+        generate_or_paste: radioReducer,
+        caluculate_score: scoreReducer,
+        is_time_up: timerReducer
     },
   })
 }

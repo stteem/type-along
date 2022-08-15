@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
 import { useAppSelector, useAppDispatch } from '../../app/hooks';
-import { addRandomTextAsync, selectText, selectStatus, resetTextArea } from './randomTextSlice';
+import { addRandomTextAsync, selectText, selectStatus, resetTextArea, addCopyPasteText } from './randomTextSlice';
 import { selectRadio } from '../setup/setupSlice';
-import { populateHashtable, storeTypedText, textLen, computeScore, resetScore } from '../score/scoreSlice';
+import { selectTimer, isTimeup, stopTime } from '../timer/timerSlice';
+
+import { storeTypedText, textLen, computeScore, resetScore } from '../score/scoreSlice';
 import OneWay from '../modal/oneway';
 import styles from './randomText.module.css';
 
@@ -12,18 +14,33 @@ import { Textarea, Loading, Button, Grid, Spacer, Modal, Image, Text, Link  } fr
 
 export default function RandomText() {
 
-    const random_text_from_store = useAppSelector(selectText);
-    const generated_text_status = useAppSelector(selectStatus);
+    const source_text_from_store = useAppSelector(selectText);
+    const source_text_status = useAppSelector(selectStatus);
     const get_radio = useAppSelector(selectRadio);
+
+    const check_time = useAppSelector(selectTimer);
+
 
     const dispatch = useAppDispatch();
 
     const [copy_paste_text, setCopyPasteText] = useState('')
     const [typed_text, setTypedText] = useState('')
+    const [disable_typing, setDisableTyping] = useState(false)
 
+    const [is_time_up, setIsTimeup] = useState('no')
 
+    // set challenge text which is typed
     const handleTypedTextChange = (e:any) => setTypedText(e.target.value);
-    const handleCopyPasteChange = (e:any) => setCopyPasteText(e.target.value);
+
+    // set copy pasted text
+    const handleCopyPasteChange = async (e:any) => {
+        setCopyPasteText(e.target.value);
+        //dispatch(addCopyPasteText(e.target.value))
+    } 
+
+    useEffect(() => {
+        dispatch(addCopyPasteText(copy_paste_text))
+    }, [copy_paste_text])
 
 
     const handleGenerateTextClick = async (e:any) => {
@@ -31,13 +48,15 @@ export default function RandomText() {
         await dispatch(addRandomTextAsync())
     }
 
-
     const handleResetClick = async (e:any) => {
         // dispatch the thunk function itself
         setCopyPasteText('')
         setTypedText('')
+        setDisableTyping(false)
         dispatch(resetTextArea())
         dispatch(resetScore())
+        dispatch(isTimeup("no"))
+        dispatch(stopTime(""))
     }
 
     const [visible, setVisible] = React.useState(false);
@@ -54,22 +73,47 @@ export default function RandomText() {
     }
 
     useEffect(() => {
-        if(random_text_from_store.length > 0)
-        console.log('hashing')
-        dispatch(populateHashtable())
-    },[random_text_from_store])
-
-    useEffect(() => {
         dispatch(storeTypedText(typed_text))
         dispatch(computeScore())
     },[typed_text])
 
-    const text = random_text_from_store.trim();
+    const text = source_text_from_store.trim();
     const trimmedText = text.length;
 
     useEffect(() => {
         dispatch(textLen(trimmedText))
     }, [trimmedText])
+
+
+    useEffect(() => {
+        if (typed_text.length > 0 && source_text_from_store.length > 0 ){
+            if (typed_text.length === source_text_from_store.length) {
+                dispatch(stopTime("0"))
+                setDisableTyping(true)
+                alert(`Congratulations! You have reached the limit, now check your score! You cannot type any longer until you reset the challenge.`)
+            }
+        }
+    },[typed_text])
+
+    useEffect(() => {
+        check_time === "yes" ? setIsTimeup(check_time) : setIsTimeup("no")
+        
+    },[check_time])
+
+    useEffect(() => {
+        if (is_time_up === 'yes') {
+            setDisableTyping(true)
+            alert("Your time is up! You cannot type any longer until you reset the challenge!")
+        }
+    }, [is_time_up])
+
+    // function handleKeyPress(e:any) {
+    //     if(is_time_up === "yes") {
+    //         e.preventDefault()
+    //         e.stopPropagation()
+    //         alert("Your time is up!")
+    //     }
+    // }
 
 
 
@@ -78,7 +122,7 @@ export default function RandomText() {
                 <div className={styles.grid}>
                     
                     {
-                        get_radio === '1' ?
+                        get_radio ?
                             <div className={styles.text_source}>
                                 <Textarea 
                                     bordered
@@ -87,13 +131,13 @@ export default function RandomText() {
                                     rows={6} cols={50} 
                                     maxLength={200}
                                     placeholder={'Generate random text by clicking the "Generate text" button below'}
-                                    value={random_text_from_store}
+                                    value={source_text_from_store}
                                 >
                                 </Textarea>
                                 <Spacer y={1}></Spacer>
                                 <Button className={styles.generate_button} onClick={handleGenerateTextClick}>
                                     {
-                                    generated_text_status == 'loading' ?
+                                    source_text_status == 'loading' ?
                                     <Loading color="currentColor" type="points" size="sm" />
                                     : "Generate text"
                                     }
@@ -129,6 +173,8 @@ export default function RandomText() {
                         maxLength={200}
                         labelPlaceholder={'Type here to begin your challenge'}
                         value={typed_text}
+                        disabled={disable_typing}
+                        //onKeyPress={handleKeyPress}
                         onChange={handleTypedTextChange}
                         onKeyDown={handleKeyDown}
                     >  

@@ -69,6 +69,14 @@ const Home: NextPage = () => {
             <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
           </span>
         </a>
+        Copyright &copy; 2022
+        <a 
+        href="https://www.linkedin.com/in/uwem-uke-9a6b06125/" 
+        target="_blank"
+        >
+          Uwem Uke.
+        </a>
+        All Rights Reserved
       </footer>
       </Container>
   )

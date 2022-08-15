@@ -22,10 +22,14 @@
 }
 
 .footer a {
+  color: #0070f3;
+}
+
+.footer a {
   display: flex;
   justify-content: center;
   align-items: center;
-  flex-grow: 1;
+  flex-grow: 0.02;
 }
 
 .title a {
