@@ -130,6 +130,7 @@ export default function RandomText() {
                                     data-testid="generate-text"
                                     rows={6} cols={50} 
                                     maxLength={200}
+                                    aria-label="generate text"
                                     placeholder={'Generate random text by clicking the "Generate text" button below'}
                                     value={source_text_from_store}
                                 >
@@ -138,7 +139,7 @@ export default function RandomText() {
                                 <Button 
                                     className={styles.generate_button} 
                                     onClick={handleGenerateTextClick}
-                                    aria-label="generate text"
+                                    data-testid="generate-btn"
                                 >
                                     {
                                     source_text_status == 'loading' ?
