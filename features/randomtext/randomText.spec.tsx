@@ -29,18 +29,4 @@ describe('<RandomText />', () => {
     expect(screen.getByTestId("type-text")).toBeInTheDocument()
   })
 
-  it('generates text from api', () => {
-    const store = makeStore()
-
-    render(
-      <Provider store={store}>
-        <RandomText />
-      </Provider>
-    )
-
-    user.click(screen.getByTestId("generate-btn"))
-
-    expect(screen.getByText(test_string)).toBeInTheDocument()
-  })
-
 })
