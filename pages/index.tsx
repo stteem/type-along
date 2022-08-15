@@ -73,6 +73,7 @@ const Home: NextPage = () => {
         <a 
         href="https://www.linkedin.com/in/uwem-uke-9a6b06125/" 
         target="_blank"
+        rel="noopener noreferrer"
         >
           Uwem Uke.
         </a>
