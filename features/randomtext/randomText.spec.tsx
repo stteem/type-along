@@ -3,8 +3,10 @@ import user from '@testing-library/user-event'
 import { Provider } from 'react-redux'
 
 const test_string = "this is a test string"
+
+
 jest.mock('./randomTextAPI', () => ({
-  fetchCount: () =>
+  fetchRandomText: () =>
     new Promise<{ data: string }>((resolve) =>
       setTimeout(() => resolve({ data: test_string }), 500)
     ),
@@ -23,7 +25,22 @@ describe('<RandomText />', () => {
       </Provider>
     )
 
-    expect(screen.getByText('Welcome to TypeAlong!')).toBeInTheDocument()
+    expect(screen.getByTestId("generate-text")).toBeInTheDocument()
+    expect(screen.getByTestId("type-text")).toBeInTheDocument()
+  })
+
+  it('generates text from api', () => {
+    const store = makeStore()
+
+    render(
+      <Provider store={store}>
+        <RandomText />
+      </Provider>
+    )
+
+    user.click(screen.getByTestId("generate-btn"))
+
+    expect(screen.getByText(test_string)).toBeInTheDocument()
   })
 
 })

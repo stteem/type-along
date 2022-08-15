@@ -32,7 +32,7 @@ export default function Settings() {
             <Radio value="1" >
                 <Text>Generate text</Text>
             </Radio>
-            <Radio value="2" >
+            <Radio value="2" aria-label="copy paste" >
                 <Text>Copy and paste</Text>
             </Radio>
         </Radio.Group>

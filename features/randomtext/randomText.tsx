@@ -127,14 +127,20 @@ export default function RandomText() {
                                     bordered
                                     id="main-text" 
                                     name="main_text" 
+                                    data-testid="generate-text"
                                     rows={6} cols={50} 
                                     maxLength={200}
+                                    aria-label="generate text"
                                     placeholder={'Generate random text by clicking the "Generate text" button below'}
                                     value={source_text_from_store}
                                 >
                                 </Textarea>
                                 <Spacer y={1}></Spacer>
-                                <Button className={styles.generate_button} onClick={handleGenerateTextClick}>
+                                <Button 
+                                    className={styles.generate_button} 
+                                    onClick={handleGenerateTextClick}
+                                    data-testid="generate-btn"
+                                >
                                     {
                                     source_text_status == 'loading' ?
                                     <Loading color="currentColor" type="points" size="sm" />
@@ -168,6 +174,7 @@ export default function RandomText() {
                         bordered
                         id="type-along" 
                         name="typealong" 
+                        data-testid="type-text"
                         minRows={10} cols={50} 
                         maxLength={200}
                         labelPlaceholder={'Type here to begin your challenge'}
@@ -179,7 +186,11 @@ export default function RandomText() {
                     >  
                     </Textarea>
                     <Spacer y={1}></Spacer>
-                    <Button id={styles.reset_button} onClick={handleResetClick}>Reset challenge</Button>
+                    <Button 
+                        id={styles.reset_button} 
+                        onClick={handleResetClick}
+                        aria-label="reset challenge"
+                        >Reset challenge</Button>
                     </div>
 
                 </div>
