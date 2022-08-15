@@ -16,10 +16,10 @@ export default function Timer() {
     const dispatch = useAppDispatch();
 
     const [preset_time, setPresetTime] = useState(1)
-    const [preset_seconds, setPresetSeconds] = useState(10)
+    const [preset_seconds, setPresetSeconds] = useState(60)
 
     const [custom_time, setCustomTime] = useState(0)
-    const [custom_seconds, setCustomSeconds] = useState(10)
+    const [custom_seconds, setCustomSeconds] = useState(60)
    
     const [selected_custom_time, setSelectedCustomTime] = useState(0)
     const [selected, setSelected] = useState('1')
@@ -32,22 +32,22 @@ export default function Timer() {
         if(strval === "1"){
             setSelected(strval)
             setPresetTime(1)
-            setPresetSeconds(10)
+            setPresetSeconds(60)
         }
         else if(strval === "2") {
             setSelected(strval)
             setPresetTime(2) 
-            setPresetSeconds(0)
+            setPresetSeconds(60)
         }
         else if(strval === "5") {
             setSelected(strval)
             setPresetTime(5)
-            setPresetSeconds(10)
+            setPresetSeconds(60)
         }
         else {
             setSelected(strval)
             setSelectedCustomTime(3)
-            setCustomSeconds(10)
+            setCustomSeconds(60)
             setCustomTime(3)
         }        
         
@@ -55,10 +55,10 @@ export default function Timer() {
 
     function handleCustomTime(e:any) {
         setCustomTime(e.target.value)
-        setCustomSeconds(10)
+        setCustomSeconds(60)
         setSelectedCustomTime(e.target.value)
         setPresetTime(1)
-        setPresetSeconds(10)
+        setPresetSeconds(60)
     }
 
     useEffect(() => {
@@ -81,8 +81,8 @@ export default function Timer() {
         if(is_typing === "1" && selected === "custom"){
             
             const interval = setInterval(() => {
-                setCustomSeconds(custom_seconds => custom_seconds !== 0 ? custom_seconds - 1 : custom_seconds === 0 && custom_time > 0 ? 10 : custom_seconds);
-                setCustomTime(custom_time => custom_time > 0 && custom_seconds === 10 ? custom_time - 1 : custom_time )
+                setCustomSeconds(custom_seconds => custom_seconds !== 0 ? custom_seconds - 1 : custom_seconds === 0 && custom_time > 0 ? 60 : custom_seconds);
+                setCustomTime(custom_time => custom_time > 0 && custom_seconds === 60 ? custom_time - 1 : custom_time )
             }, 1000);
     
             return () => clearInterval(interval);
@@ -98,8 +98,8 @@ export default function Timer() {
         if (is_typing === "1" && selected !== "custom") {
 
             const preset_interval = setInterval(() => {
-                setPresetSeconds(preset_seconds => preset_seconds !== 0 ? preset_seconds - 1 : preset_seconds === 0 && preset_time > 0 ? 10 : preset_seconds);
-                setPresetTime(preset_time => preset_time > 0 && preset_seconds === 10 ? preset_time - 1 : preset_time )
+                setPresetSeconds(preset_seconds => preset_seconds !== 0 ? preset_seconds - 1 : preset_seconds === 0 && preset_time > 0 ? 60 : preset_seconds);
+                setPresetTime(preset_time => preset_time > 0 && preset_seconds === 60 ? preset_time - 1 : preset_time )
             }, 1000);
     
             return () => clearInterval(preset_interval);
@@ -110,9 +110,9 @@ export default function Timer() {
     // Listens to typed text and resets timers when challenge is reset
     useEffect(() => {
         if(get_typed_text.length === 0){
-            setCustomSeconds(10)
+            setCustomSeconds(60)
             setCustomTime(selected_custom_time)
-            setPresetSeconds(10)
+            setPresetSeconds(60)
             setPresetTime(parseInt(selected))
         }
     }, [get_typed_text])
