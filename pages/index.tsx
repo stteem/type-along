@@ -73,7 +73,7 @@ const Home: NextPage = () => {
           </span>
         </a>
         {' '}Copyright &copy; 2022
-        <a 
+        <a id={styles.name}
         href="https://www.linkedin.com/in/uwem-uke-9a6b06125/" 
         target="_blank"
         rel="noopener noreferrer"
