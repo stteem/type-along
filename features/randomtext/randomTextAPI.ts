@@ -17,4 +17,3 @@ export async function fetchRandomText() {
         return console.log(error);
     }
 }
-

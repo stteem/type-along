@@ -1,16 +1,20 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
-import Image from 'next/image'
 import RandomText from '../features/randomtext/randomText'
 import Settings from '../features/setup/setup'
 import Timer from '../features/timer/timer'
 import Score from '../features/score/score'
 import styles from '../styles/Home.module.css'
 
-import { Container, Card, Row, Col, Text, Grid } from "@nextui-org/react";
+import { Container, Card, Row, Text, Grid } from "@nextui-org/react";
+import { useAppSelector } from '../app/hooks';
+import { selectMessage } from '../features/score/scoreSlice'
 
 
 const Home: NextPage = () => {
+
+  const message = useAppSelector(selectMessage)
+
   return (
     <Container justify="center">
       <Head>
@@ -24,18 +28,39 @@ const Home: NextPage = () => {
           Welcome to TypeAlong!
         </h2>
 
-        {/* <p className={styles.description}>
-          Get started by generating a random text or copy/paste your own text!
-        </p> */}
-        <Card className={styles.description} css={{ $$cardColor: '$colors$primary' }}>
-        <Card.Body>
-          <Row justify="center" align="center">
-            <Text h6 size={15} color="white" css={{ m: 0 }}>
-              Get started by generating a random text or copy/paste your own text!
-            </Text>
-          </Row>
-        </Card.Body>
-      </Card>
+        {
+          message === '' ?
+          <Card className={styles.description} css={{ $$cardColor: '$colors$primary' }}>
+            <Card.Body>
+              <Row justify="center" align="center">
+                <Text h6 size={15} color="white" css={{ m: 0 }}>
+                  Get started by generating a random text or copy/paste your own text!
+                </Text>
+              </Row>
+            </Card.Body>
+          </Card>
+          :
+          message.substring(0,1) === "C" ?
+            <Card className={styles.description} css={{ $$cardColor: '$colors$success' }}>
+              <Card.Body>
+                <Row justify="center" align="center">
+                  <Text h6 size={15} color="white" css={{ m: 0 }}>
+                    {message}
+                  </Text>
+                </Row>
+              </Card.Body>
+            </Card>
+          :
+          <Card className={styles.description} css={{ $$cardColor: '$colors$warning' }}>
+            <Card.Body>
+              <Row justify="center" align="center">
+                <Text h6 size={15} color="white" css={{ m: 0 }}>
+                  {message}
+                </Text>
+              </Row>
+            </Card.Body>
+          </Card>
+        }
 
         
       <Grid.Container className={styles.score_board} gap={2} justify="center">

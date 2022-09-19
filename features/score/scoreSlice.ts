@@ -7,12 +7,14 @@ export interface ScoreState {
   total: number,
   score: number,
   typed_text: string,
+  message: string
 }
 
 const initialState: ScoreState = {
   total: 0,
   score: 0,
   typed_text: '',
+  message: ''
 }
 
 
@@ -34,17 +36,23 @@ export const scoreSlice = createSlice({
     resetScore: (state) => {
       state.score = 0
     },
+    setMessage: (state, action: PayloadAction<string>) => {
+      state.message = action.payload
+    },
+    clearMessage: (state) => {
+      state.message = ""
+    },
   }
 })
 
-export const { textLen, storeTypedText, challengeScore, resetScore } = scoreSlice.actions
+export const { textLen, storeTypedText, challengeScore, resetScore, setMessage, clearMessage } = scoreSlice.actions
 
 
 export const selectTotalScore = (state: AppState) => state.caluculate_score.total
 export const selectChallengeScore = (state: AppState) => state.caluculate_score.score
 export const selectTypedText = (state: AppState) => state.caluculate_score.typed_text
 export const selectRandomText = (state: AppState) => state.source_text.source
-
+export const selectMessage = (state: AppState) => state.caluculate_score.message
 
 
 export const computeScore = (): AppThunk => (dispatch, getState) => {

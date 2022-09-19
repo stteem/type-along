@@ -4,8 +4,7 @@ import { useAppSelector, useAppDispatch } from '../../app/hooks';
 import { addRandomTextAsync, selectText, selectStatus, resetTextArea, addCopyPasteText } from './randomTextSlice';
 import { selectRadio } from '../setup/setupSlice';
 import { selectTimer, isTimeup, stopTime } from '../timer/timerSlice';
-
-import { storeTypedText, textLen, computeScore, resetScore } from '../score/scoreSlice';
+import { storeTypedText, textLen, computeScore, resetScore, setMessage, clearMessage } from '../score/scoreSlice';
 import styles from './randomText.module.css';
 
 import { Textarea, Loading, Button, Grid, Spacer, Modal, Image, Text, Link  } from "@nextui-org/react";
@@ -56,6 +55,7 @@ export default function RandomText() {
         dispatch(resetScore())
         dispatch(isTimeup("no"))
         dispatch(stopTime(""))
+        dispatch(clearMessage())
     }
 
     const [visible, setVisible] = React.useState(false);
@@ -89,7 +89,9 @@ export default function RandomText() {
             if (typed_text.length === source_text_from_store.length) {
                 dispatch(stopTime("0"))
                 setDisableTyping(true)
-                alert(`Congratulations! You have reached the limit, now check your score and time! You cannot type any longer until you reset the challenge.`)
+                dispatch(setMessage(`Congratulations! You have reached the limit, 
+                now check your score and time! You cannot type any longer until 
+                you reset the challenge.`))
             }
         }
     },[typed_text])
@@ -102,7 +104,7 @@ export default function RandomText() {
     useEffect(() => {
         if (is_time_up === 'yes') {
             setDisableTyping(true)
-            alert("Your time is up! You cannot type any longer until you reset the challenge!")
+            dispatch(setMessage("Your time is up! You cannot type any longer until you reset the challenge!"))
         }
     }, [is_time_up])
 
@@ -127,8 +129,8 @@ export default function RandomText() {
                                     bordered
                                     id="main-text" 
                                     name="main_text" 
-                                    data-testid="generate-text"
-                                    rows={6} cols={50} 
+                                    role="generate_text"
+                                    rows={6} cols={50}
                                     maxLength={200}
                                     aria-label="generate text"
                                     placeholder={'Generate random text by clicking the "Generate text" button below'}
@@ -138,8 +140,9 @@ export default function RandomText() {
                                 <Spacer y={1}></Spacer>
                                 <Button 
                                     className={styles.generate_button} 
-                                    onClick={handleGenerateTextClick}
-                                    data-testid="generate-btn"
+                                    //onClick={handleGenerateTextClick}
+                                    onPress={handleGenerateTextClick}
+                                    role="generateBtn"
                                 >
                                     {
                                     source_text_status == 'loading' ?
@@ -155,6 +158,8 @@ export default function RandomText() {
                                 bordered
                                 id="copy-paste" 
                                 name="copy_paste" 
+                                aria-label="copy paste text"
+                                role="copy-paste"
                                 rows={6} cols={50} 
                                 maxLength={200}
                                 placeholder={'Copy and paste a text to start your typing challenge'}
@@ -174,7 +179,7 @@ export default function RandomText() {
                         bordered
                         id="type-along" 
                         name="typealong" 
-                        data-testid="type-text"
+                        role="type_text"
                         minRows={10} cols={50} 
                         maxLength={200}
                         labelPlaceholder={'Type here to begin your challenge'}
@@ -190,6 +195,7 @@ export default function RandomText() {
                         id={styles.reset_button} 
                         onClick={handleResetClick}
                         aria-label="reset challenge"
+                        role="reset-button"
                         >Reset challenge</Button>
                     </div>
 

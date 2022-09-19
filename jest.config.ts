@@ -12,6 +12,7 @@ const config: InitialOptionsTsJest = {
       tsconfig: 'tsconfig.test.json',
     },
   },
+  collectCoverage: true,
 }
 
 export default config
